@@ -13,7 +13,7 @@ function DashBoard() {
     const getTasksDay = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get("http://localhost:3000/tasksDay");
+            const response = await axios.get("https://to-do-list-server-alpha.vercel.app/tasksDay");
             setTasksDay(response.data);
         } catch (error) {
             toast.error("Erro ao carregar as tarefas do dia");
@@ -25,7 +25,7 @@ function DashBoard() {
     const getTasksNight = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get('http://localhost:3000/tasksNight');
+            const response = await axios.get('https://to-do-list-server-alpha.vercel.app/tasksNight');
             setTasksNight(response.data);
         } catch (error) {
             toast.error("Erro ao carregar as tarefas da noite");

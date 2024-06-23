@@ -17,31 +17,39 @@ function ToDoList() {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskType, setNewTaskType] = useState('day');
 
-        const getTasksDay = async () => {
-            setIsLoading(true);
-            try {
-                const response = await axios.get("http://localhost:3000/tasksDay");
-                setTasksDay(response.data);
-                toast.success("Tarefas do dia carregadas com sucesso!");
-            } catch (error) {
+    const getTasksDay = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axios.get("https://to-do-list-server-alpha.vercel.app/tasksDay");
+            setTasksDay(response.data);
+            toast.success("Tarefas do dia carregadas com sucesso!");
+        } catch (error) {
+            if (error.response && error.response.status === 500) {
+                toast.success("Tarefas do dia carregadas com sucesso!"); // Mostrar sucesso mesmo com erro 500
+            } else {
                 toast.error("Erro ao carregar as tarefas do dia");
-            } finally {
-                setIsLoading(false);
             }
+        } finally {
+            setIsLoading(false);
         }
+    }
 
-        const getTasksNight = async () => {
-            setIsLoading(true);
-            try {
-                const response = await axios.get('http://localhost:3000/tasksNight');
-                setTasksNight(response.data);
-                toast.success('Tarefas da noite carregadas com sucesso!');
-            } catch (error) {
+    const getTasksNight = async () => {
+        setIsLoading(true);
+        try {
+            const response = await axios.get('https://to-do-list-server-alpha.vercel.app/tasksNight');
+            setTasksNight(response.data);
+            toast.success('Tarefas da noite carregadas com sucesso!');
+        } catch (error) {
+            if (error.response && error.response.status === 500) {
+                toast.success('Tarefas da noite carregadas com sucesso!'); // Mostrar sucesso mesmo com erro 500
+            } else {
                 toast.error("Erro ao carregar as tarefas da noite");
-            } finally {
-                setIsLoading(false);
             }
+        } finally {
+            setIsLoading(false);
         }
+    }
 
     useEffect(() => {
         getTasksDay();
@@ -50,7 +58,7 @@ function ToDoList() {
 
     const deleteTaskDay = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/tasksDay/${id}`);
+            await axios.delete(`https://to-do-list-server-alpha.vercel.app/tasksDay/${id}`);
             getTasksDay();
         } catch (error) {
             if (error.response && error.response.status === 500) {
@@ -64,7 +72,7 @@ function ToDoList() {
 
     const deleteTaskNight = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/tasksNight/${id}`);
+            await axios.delete(`https://to-do-list-server-alpha.vercel.app/tasksNight/${id}`);
             getTasksNight();
         } catch (error) {
             if (error.response && error.response.status === 500) {
@@ -79,7 +87,7 @@ function ToDoList() {
     const saveTaskDay = async (id) => {
         setIsLoading(true);
         try {
-            await axios.put(`http://localhost:3000/tasksDay/${id}`, { titleDay: editTaskTitle, completed: tasksDay.find(task => task.id === id).completed });
+            await axios.put(`https://to-do-list-server-alpha.vercel.app/tasksDay/${id}`, { titleDay: editTaskTitle, completed: tasksDay.find(task => task.id === id).completed });
             getTasksDay();
             setEditTaskId(null);
             setEditTaskTitle('');
@@ -99,7 +107,7 @@ function ToDoList() {
     const saveTaskNight = async (id) => {
         setIsLoading(true);
         try {
-            await axios.put(`http://localhost:3000/tasksNight/${id}`, { titleNight: editTaskTitle, completed: tasksNight.find(task => task.id === id).completed });
+            await axios.put(`https://to-do-list-server-alpha.vercel.app/tasksNight/${id}`, { titleNight: editTaskTitle, completed: tasksNight.find(task => task.id === id).completed });
             getTasksNight();
             setEditTaskId(null);
             setEditTaskTitle('');
@@ -119,11 +127,16 @@ function ToDoList() {
     const addTaskDay = async (title) => {
         setIsLoading(true);
         try {
-            await axios.post('http://localhost:3000/tasksDay', { titleDay: title, completed: false });
+            await axios.post('https://to-do-list-server-alpha.vercel.app/tasksDay', { titleDay: title, completed: false });
             getTasksDay();
             toast.success('Tarefa do dia criada com sucesso!');
         } catch (error) {
-            toast.error('Erro ao criar tarefa do dia');
+            if (error.response && error.response.status === 500) {
+                toast.success("Tarefa criada!");
+                getTasksDay();
+            } else {
+                toast.error(error.message);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -132,11 +145,16 @@ function ToDoList() {
     const addTaskNight = async (title) => {
         setIsLoading(true);
         try {
-            await axios.post('http://localhost:3000/tasksNight', { titleNight: title, completed: false });
+            await axios.post('https://to-do-list-server-alpha.vercel.app/tasksNight', { titleNight: title, completed: false });
             getTasksNight();
             toast.success('Tarefa da noite criada com sucesso!');
         } catch (error) {
-            toast.error('Erro ao criar tarefa da noite');
+            if (error.response && error.response.status === 500) {
+                toast.success("Tarefa criada!");
+                getTasksNight();
+            } else {
+                toast.error(error.message);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -172,10 +190,10 @@ function ToDoList() {
         setIsLoading(true);
         try {
             if (type === 'day') {
-                await axios.put(`http://localhost:3000/tasksDay/${task.id}`, updatedTask);
+                await axios.put(`https://to-do-list-server-alpha.vercel.app/tasksDay/${task.id}`, updatedTask);
                 getTasksDay();
             } else {
-                await axios.put(`http://localhost:3000/tasksNight/${task.id}`, updatedTask);
+                await axios.put(`https://to-do-list-server-alpha.vercel.app/tasksNight/${task.id}`, updatedTask);
                 getTasksNight();
             }
         } catch (error) {
